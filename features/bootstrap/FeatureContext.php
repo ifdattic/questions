@@ -37,6 +37,7 @@ class FeatureContext implements Context, SnippetAcceptingContext
     public function clearData()
     {
         $this->em->getRepository('AppBundle:Question')->deleteAll();
+        $this->em->getRepository('AppBundle:Tag')->deleteAll();
     }
 
     /**
@@ -85,5 +86,44 @@ class FeatureContext implements Context, SnippetAcceptingContext
         $questions = array_map($callback, $this->result);
 
         Assert::assertEquals($table->getHash(), $questions);
+    }
+
+    /**
+     * @Given there are no tags
+     */
+    public function thereAreNoTags()
+    {
+        $this->em->getRepository('AppBundle:Tag')->deleteAll();
+    }
+
+    /**
+     * @When I request a list of tags
+     */
+    public function iRequestAListOfTags()
+    {
+        $this->result = $this->em->getRepository('AppBundle:Tag')->getTags();
+    }
+
+    /**
+     * @Given there is a tag :name
+     */
+    public function thereIsATag($name)
+    {
+        $this->em->getRepository('AppBundle:Tag')->addTag(['name' => $name]);
+    }
+
+    /**
+     * @Then I should see a list of tags containing:
+     */
+    public function iShouldSeeAListOfTagsContaining(TableNode $table)
+    {
+        $callback = function ($tag) {
+            return [
+                'name' => (string) $tag->getName(),
+            ];
+        };
+        $tags = array_map($callback, $this->result);
+
+        Assert::assertEquals($table->getHash(), $tags);
     }
 }
