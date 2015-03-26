@@ -36,8 +36,15 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function clearData()
     {
-        $this->em->getRepository('AppBundle:Question')->deleteAll();
-        $this->em->getRepository('AppBundle:Tag')->deleteAll();
+        $connection = $this->em->getConnection();
+        $tables = $connection->getSchemaManager()->listTables();
+        $databasePlatform = $connection->getDatabasePlatform();
+
+        foreach ($tables as $table) {
+            $connection->executeQuery(
+                $databasePlatform->getTruncateTableSQL($table->getName())
+            );
+        }
     }
 
     /**
