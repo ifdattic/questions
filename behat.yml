@@ -4,5 +4,18 @@ default:
             contexts:
                 - FeatureContext:
                     em: @doctrine.orm.entity_manager
+        web:
+            contexts:
+                - WebContext:
+                    em: @doctrine.orm.entity_manager
+            filters:
+                tags: "@critical"
     extensions:
         Behat\Symfony2Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    goutte: ~
+
+imports:
+    - behat.local.yml
