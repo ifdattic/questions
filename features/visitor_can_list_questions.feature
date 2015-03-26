@@ -12,8 +12,8 @@ Feature: A visitor can view a list of questions
         Given there is a question "Who are you?"
         When I request a list of questions
         Then I should see a list of questions containing:
-            | question     |
-            | Who are you? |
+            | question          | tags |
+            | Who are you?      |      |
 
     Scenario: Questions are sorted alphabetically
         Given there is a question "Who are you?"
@@ -21,7 +21,18 @@ Feature: A visitor can view a list of questions
         And there is a question "Do you want this?"
         When I request a list of questions
         Then I should see a list of questions containing:
-            | question          |
-            | Do you want this? |
-            | Who are you?      |
-            | Why?              |
+            | question          | tags |
+            | Do you want this? |      |
+            | Who are you?      |      |
+            | Why?              |      |
+
+    Scenario: View a list of questions with alphabetically sorted tags
+        Given there is a question "Who are you?" with tags:
+            | name         |
+            | personal     |
+            | jobs         |
+            | achievements |
+        When I request a list of questions
+        Then I should see a list of questions containing:
+            | question     | tags                       |
+            | Who are you? | achievements,jobs,personal |

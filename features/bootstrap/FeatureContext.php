@@ -116,9 +116,20 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @Then I should see a list of questions containing:
      */
+    public function iShouldSeeAListOfQuestionsContaining(TableNode $table)
     {
+        $callback = function ($question) {
+            return [
+                'question' => (string) $question->getQuestion(),
+                'tags' => implode(',', $question->getTags()->toArray()),
+            ];
+        };
 
+        $questions = array_map($callback, $this->result);
+
+        Assert::assertEquals($table->getHash(), $questions);
     }
 
     /**

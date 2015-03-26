@@ -10,17 +10,25 @@ class QuestionRepository extends EntityRepository
     public function getQuestions()
     {
         return $this->createQueryBuilder('q')
+            ->select(['q', 't'])
+            ->leftJoin('q.tags', 't')
             ->orderBy('q.question', 'ASC')
             ->getQuery()
             ->execute()
         ;
     }
 
-    public function addQuestion(array $data)
+    public function addQuestion(array $data, array $tags = [])
     {
         $em = $this->getEntityManager();
         $question = new Question();
         $question->setQuestion($data['question']);
+
+        foreach ($tags as $tagData) {
+            $tag = new Tag();
+            $tag->setName($tagData['name']);
+            $question->addTag($tag);
+        }
 
         $em->persist($question);
         $em->flush();
