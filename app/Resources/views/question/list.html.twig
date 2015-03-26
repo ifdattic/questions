@@ -1,0 +1,13 @@
+{% extends "::base.html.twig" %}
+
+{% block body %}
+    <h1>Questions</h1>
+
+    {% if questions|length > 0 %}
+        <ul class="questions">
+            {% for question in questions %}
+                <li>{{ question.question }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
