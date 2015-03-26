@@ -56,11 +56,27 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
+     * @Given there are no tags
+     */
+    public function thereAreNoTags()
+    {
+        $this->em->getRepository('AppBundle:Tag')->deleteAll();
+    }
+
+    /**
      * @When I request a list of questions
      */
     public function iRequestAListOfQuestions()
     {
         $this->result = $this->em->getRepository('AppBundle:Question')->getQuestions();
+    }
+
+    /**
+     * @When I request a list of tags
+     */
+    public function iRequestAListOfTags()
+    {
+        $this->result = $this->em->getRepository('AppBundle:Tag')->getTags();
     }
 
     /**
@@ -81,42 +97,28 @@ class FeatureContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * @Then I should see a list of questions containing:
-     */
-    public function iShouldSeeAListOfQuestionsContaining(TableNode $table)
-    {
-        $callback = function ($question) {
-            return [
-                'question' => (string) $question->getQuestion(),
-            ];
-        };
-        $questions = array_map($callback, $this->result);
-
-        Assert::assertEquals($table->getHash(), $questions);
-    }
-
-    /**
-     * @Given there are no tags
-     */
-    public function thereAreNoTags()
-    {
-        $this->em->getRepository('AppBundle:Tag')->deleteAll();
-    }
-
-    /**
-     * @When I request a list of tags
-     */
-    public function iRequestAListOfTags()
-    {
-        $this->result = $this->em->getRepository('AppBundle:Tag')->getTags();
-    }
-
-    /**
      * @Given there is a tag :name
      */
     public function thereIsATag($name)
     {
         $this->em->getRepository('AppBundle:Tag')->addTag(['name' => $name]);
+    }
+
+    /**
+     * @Given there is a question :question with tags:
+     */
+    public function thereIsAQuestionWithTags($question, TableNode $table)
+    {
+        $this->em->getRepository('AppBundle:Question')->addQuestion(
+            ['question' => $question],
+            $table->getHash()
+        );
+    }
+
+    /**
+     */
+    {
+
     }
 
     /**
