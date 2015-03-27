@@ -27,6 +27,7 @@ Feature: A visitor can view a list of questions
             | Who are you?      |      |
             | Why?              |      |
 
+    @critical
     Scenario: View a list of questions with alphabetically sorted tags
         Given there is a question "Who are you?" with tags:
             | name         |

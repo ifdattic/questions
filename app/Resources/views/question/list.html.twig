@@ -6,7 +6,16 @@
     {% if questions|length > 0 %}
         <ul class="questions">
             {% for question in questions %}
-                <li>{{ question.question }}</li>
+                <li>
+                    {{ question.question }}
+                    {% if question.tags|length > 0 %}
+                        <ul class="tags">
+                            {% for tag in question.tags %}
+                                <li>{{ tag.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
     {% endif %}
